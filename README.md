@@ -1,6 +1,6 @@
 #pViz.js: a JavaScript toolkit to bring LC-MS/MS data to your browser
 
-##Visit the [how to we site](http://research-pub/fishtones-js/howto) to get documentation, code snippets and running examples
+##Visit the [how-to web site](http://research-pub/fishtones-js/howto) to get documentation, code snippets and running examples
 
 ##What is fishTones.js?
 fishTones.js is a JavaScript library to visualize Liquid Chromatography Tandem Mass Spectrometry data in modern web browsers.
