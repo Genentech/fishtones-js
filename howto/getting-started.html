@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>fishTones-js/getting started</title>
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/fishtones-js.css"/>
+
+    <script src="lib/fishtones-js-bundle-min.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/underscore.js"></script>
+
+    <script src="howto-utils.js"></script>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy" style="margin:60">
+
+<div class="container" style="margin-top:60px">
+    <div class="row">
+        <div class="col-md-9">
+            <h1>Using fishTones.js</h1>
+
+            <p>
+                <strong>NB:</strong> throughout theses pages, we will demonstrate the usage of the library via its
+                bundled
+                distribution (one file packaged with all its dependencies). It is also possible to use it in a lighter,
+                more
+                dynamic and more elaborated way with <a href="http://requiresjs.org">require.js</a>. More information on
+                the development
+                perspectives can be found on <a href="http://github.com/genentech/fishtones-js">github</a>.
+            </p>
+
+            <p><strong>NB':</strong> the library has been developed and tested on modern web browser, target mainly at
+                Chrome, Firefox and Safari. Some features may not be available on older navigators.</p>
+
+            <h2>What can you find on theses pages?</h2>
+            This JavaScript mass spectrometry library has been organized in three sub structure, mimicked by the current
+            documentation:
+            <ul>
+                <li><strong><a href="dry.html">dry</a>:</strong> the theoretical computations of peptide structures,
+                    masses etc.
+                </li>
+                <li><strong><a href="wet.html">wet</a>:</strong> experimental data such as mass spectra, XIC etc.</li>
+                <li><strong><a href="match.html">match</a>:</strong> alignment of wet/dry or wet/wet information.</li>
+            </ul>
+
+            Each part contain models (object representation), collections (lists or dictionaries of objects), services
+            (single point handling data access, or computation factories) and views (rendering visualization, and
+            managing interactions).
+
+            <h3>Documentation structure</h3>
+            Aimed to be an overview of the library, the current documentation tries to cover three majors aspects:
+            <ul>
+                <li><span class="label label-success" style="display: inline-block;width:10em; margin-right:1em">documentation</span>
+                    presents the design choices, the key components;
+                </li>
+                <li><span class="label label-warning" style="display: inline-block;width:10em; margin-right:1em">(partial) API</span>
+                    offer a summary of the main methods, whereas source
+                    code or unit tests are more comprehensive;
+                </li>
+                <li><span class="label label-danger" style="display: inline-block;width:10em; margin-right:1em">code (+ viz)</span>
+                    show small code snippets and their actual output. The actual mechanism is described below.
+                </li>
+            </ul>
+
+            <h3>How do code snippet actually work?</h3>
+            Each code snippet, visible when clicking on the button, is loaded from a <code>.html</code> and a
+            <code>.js</code> files. The JavaScript is actually executed for the demo, meaning that the sample code is a
+            fully working example. The mechanism under this features is stored in the <code>sampleCode</code> jQuery
+            plugin with <a href="howto-utils.js">howto-utils.js</code> script</a>.
+            <p>Finally, code samples take advantage
+                of two mainstream libraries: <a href="http://jquery.org">jQuery.js</a> (<code>$</code>) and <a
+                        href="http:/>/underscorejs.org">underscore.js</a> (<code>_</code>). The mention to <code>$('$target')</code>
+                in the Javascript sources is replaced at runtime by the container of the example html template.</p>
+
+            <h2>How to actually use fishTones.js?</h2>
+
+            <p>To use fishTones.js in your own web page, the simplest way is to include the JavaScript bundle and css
+                into your header. Both files can be downloaded in the <a href="http://github.com/genentech/fishtones-js/dist">github
+                    dist/ directory</a>. You can then later use the exposed <code>fishtones</code> object within a
+                <code>&lt;script></code> element or in an included <code>.js</code> file.
+            </p>
+
+            <p><strong>NB:</strong> if you need to include your own jQuery or Bootstrap libraries, it must be done <u>after</u>
+                the <code>fishtones-js-bundle-min.js</code> import, to avoid overloading effects.</p>
+            <pre>
+&lt;html>
+&lt;head>
+    &lt;link rel="stylesheet" type="text/css" href="css/fishtones-js.css"/>
+    &lt;script src="lib/fishtones-js-bundle-min.js">&lt;/script>
+&lt;/head>
+&lt;body>
+    &lt;script>
+        var peptide = new fishtones.dry.RichSequence().fromString('PKPTIDER');
+    &lt;/script>
+&lt;/body>
+&lt;/html>
+            </pre>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

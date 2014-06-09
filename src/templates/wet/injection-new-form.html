@@ -1,0 +1,47 @@
+<div class="injection">
+	<div class="form-horizontal">
+		<legend>
+			Create a new injection
+		</legend>
+		<form id="form-upload-run"  method="post" enctype="multipart/form-data" target="iframe_dev_null">
+			<div class="control-group">
+				<label class="control-label" for="inputInjMzxml">mzXml</label>
+				<div class="controls">
+					<input type="file" name="mzxml"  id="inputInjMzxml" placeholder="set a name & mzXml"/>
+				</div>
+			</div>
+		</form>
+		<div class="control-group">
+			<label class="control-label" for="inputInjName">name</label>
+			<div class="controls">
+				<input type="text" size="16" name="name" id="inputInjName" class='input-xlarge' placeholder="set a name & mzXml"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputPrecursorTol">precursor tol.</label>
+			<div class="controls">
+				<div class="input-prepend">
+					<input type="number" name="precursorTol" id="inputPrecursorTol" value="8" class="input-small" placeholder="numeric"/>
+					<span class="add-on">ppm</span>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputFragmentTol">fragment tol.</label>
+			<div class="controls">
+				<div class="input-prepend">
+					<input type="number" name="fragmentTol" id="inputFragmentTol" value="200" class="input-small" placeholder="numeric"/>
+					<span class="add-on">ppm</span>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn btn-info" disabled="disabled">
+					create
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>fishTones-js/wet</title>
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/fishtones-js.css"/>
+
+    <script src="lib/fishtones-js-bundle-min.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/underscore.js"></script>
+
+    <script src="howto-utils.js"></script>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy" style="margin:60">
+
+<div class="container">
+<div class="row">
+<div class="col-md-9">
+<h2 id="introduction" class="affix-anchor">Introduction</h2>
+
+<p>
+    The wet package handles all matters related to experimental data. Although more is available in the
+    library
+    (such as experiment grouping), we will focus here on MS/MS spectra, run (spectra collection) and extracted
+    ion chromatograms (XIC).
+</p>
+
+<h3 id="server-side-aspects" class="affix-anchor">Server side aspects</h3>
+
+<p>In real life, experimental data are delivered by a server side application responding to ajax requests.
+    Such
+    part of an application is out of scope here, but the toolkit is server agnostic. We have internally
+    developed backend applications in Groovy/Grails, Scala/Scalatra/Play and Node.js/Express for various situations. The
+    server must
+    simply answer to <code>GET</code> requests (the simplest form of url calls).</p>
+
+<p>
+    The url to serve data can be configured via the <code>fishtones.wet.Config</code> object through
+    <code>fishTones.wet.Config.set('wet.url.rest',
+        'http://host/root/path')</code>.
+</p>
+
+<p>For the sake of the code examples, we will either explicitly instanciate the object or read the mock
+    objects stored in the <code>data-demo/</code> directory.</p>
+
+<h2 id="msms-spectra" class="affix-anchor">MS/MS spectra</h2>
+A fragmentation spectrum contains precursor information and a several arrays of double for peaks. The design
+reason behind preferring to have arrays for <code>mozs</code>, <code>intensities</code> etc. instead of one
+array of peak objects, each being a map with its own m/z and intensity is to save memory. All of these
+arrays must have the same length and are sorted according to the <code>mozs</code> values.
+
+<p>More precisely, a <code>fishtones.wet.ExpMSMSSpectrum</code> object typically contains the properties:
+<ul>
+    <li><code>id</code>: [optional] unique value to fetch the spectrum on the server;</li>
+    <li><code>precMoz</code>: precursor mass over charge ratio;</li>
+    <li><code>mozs</code>: array of sorted floating point values for fragment m/z;</li>
+    <li><code>intensities</code>: array of peak intensities</li>
+    <li><code>intensityRanks</code>: [optional] array of integer values, <code>0</code> standing for the
+        most intense fragment. Several algorithm can be applied to sort peaks by intensities and this
+        operation is typically achieved on the server side.
+    </li>
+</ul>
+Being JavaScript objects, there are no limits on additional properties tighten to an entity. We will below how in some
+situations, spectra are loaded without their fragment peaks, to save memory when only precursor level information is needed.
+</p>
+
+<div class="api-block">
+    <div class="api">
+        <div class="code">var spectrum = new fishtones.wet.ExpMSMSSpectrum({precMoz:Double,...})</div>
+        <div class="doc">Creates a new <code>ExpMSMSSpectrum</code> object.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">spectrum.get(property:String)</div>
+        <div class="doc">Get any property.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">spectrum.size()</div>
+        <div class="doc">Get the number of fragments.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">spectrum.fetch({success:callback})</div>
+        <div class="doc">if the spectrum is defined with an id, it can be load asynchronously and the
+            success callback executed with the spectrum as argument.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">spectrum.mozs()</div>
+        <div class="doc">Get an array of fragment m/z values.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">spectrum.shiftByMoz(delta:Float)</div>
+        <div class="doc">Shifts all fragment m/z by the given delta.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">spectrum.concatFragments(otherSpectrum:ExpMSMSSpectrum)</div>
+        <div class="doc">Adds all the fragments from another spectrum.
+        </div>
+    </div>
+</div>
+<div class="sample-code" sample="msms-spectrum">
+    <h4>define a simple spectrum</h4>
+</div>
+<h3 id="msms-async">Asynchronous loading</h3>
+As stated in the introduction, experimental data can get asynchronously fetched on the server. We
+demonstrate in the following an example which can be transposed to all other experimental objects.
+<div class="sample-code" sample="msms-spectrum-fetch">
+    <h4>fetching a spectrum on the server</h4>
+</div>
+<h3 id="msms-viz">Visualization</h3>
+Driven by use cases, most of the visualization is done in the <a href="match.html">match</a> part. However,
+we present here a simple MS/MS spectrum viewer with zoom. Drag the mouse to zoom in and double click to zoom out.
+<div class="sample-code" sample="msms-spectrum-viz" with_visualization="true">
+    <h4>a basic spectrum zoomable view</h4>
+</div>
+
+<h2 id="msrun">MS/MS runs</h2>
+An <code>fishtones.wet.MSMSRun</code> holds a collection of mass spectrum (namely a <code>fishtones.wet.ExpMSMSSpectrumCollection</code>,
+which extends a <a href="http://backbonejs.org/#Collection">a Backbone collection</a>) and many other
+properties. As for a single spectrum, an <code>id</code> field is needed to load data from the server.
+<p>As described in the API below, an <code>MSRun</code> can be loaded with or without its spectra, which can
+    even been loaded with or without the fragments. Decoupling these different levels of load is done for
+    memory sake (there is no need to load all the fragments if the goal is to display only high level spectra
+    information.</p>
+
+<div class="api-block">
+    <div class="api">
+        <div class="code">var run = new fishtones.wet.MSMSRun({id:Any,...})</div>
+        <div class="doc">Creates a new <code>MSMSRun</code> object.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">run.get(property:String)</div>
+        <div class="doc">Get any property.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">run.fetch({success:callback})</div>
+        <div class="doc">if the run is defined with an id, it can be load asynchronously and the
+            success callback executed with the run as argument.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">run.get('msms')</div>
+        <div class="doc">If the information is available, get an <code>ExpMSMSSpectrumCollection</code>,
+            extending a <a href="http://backbonejs.org/#Collection">a Backbone collection</a>.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">run.readMsmsInfo({success:callback})</div>
+        <div class="doc">Fetch MS/MS spectra collection, without the fragment peaks. the call back is called
+            with the run as parameter.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">run.fetchMSMS({filterOpt:Array, success:callback})</div>
+        <div class="doc">Fill the run with full ExpMSMSSpectrum data, including peaks.
+            <code>filterOpt</code> can either be <code>ids</code> or <code>scanNumbers</code>, giving an
+            array of such.
+            If no <code>filterOpt</code> is passed, all spectra are fetched.
+            The callback is called with the run as argument.
+        </div>
+    </div>
+</div>
+<div class="sample-code" sample="msrun-list-spectra">
+    <h4>load a run and list spectra headers</h4>
+</div>
+<div class="sample-code" sample="msrun-viz" with_visualization="true">
+    <h4>load a run and show some fragmentation spectra</h4>
+</div>
+
+<h2 id="injections">Injections</h2>
+A <code>fishtones.wet.Injection</code> is a container for an <code>MSMSRun</code> plus extra parameters
+(mainly mass tolerances). It contains the properties:
+<ul>
+    <li><code>id</code>: used for the fetch calls;</li>
+    <li><code>name</code>: a string decription;</li>
+    <li><code>InstrumentParams</code>: a map with tolerance (in ppm) <code>{fragmentTol:float,
+        precursorTol:float}</code>;</li>
+    <li><code>runInfo</code>: the MS/MS run information (id, name etc.)</li>
+</ul>
+<p>Beside holding an <code>MSMSRun</code>, an <code>Injection</code> object is the entry point to extracting
+    the <code>XIC</code> describe thereafter, as it holds the <code>precursorTol</code> defined for the run.
+</p>
+
+<p>
+    The main method on an <code>Injection</code> is the <code>injection.fetch({success:callback{})</code>,
+    working in the same way as the <code>ExpMSMSSpectrum</code> or the <code>MSMSRun</code> one.
+</p>
+
+<h2 id="xic">Cross Ions Chromatograms (XIC)</h2>
+A <code>fishtones.wet.XIC</code> collects the MS<sup>1</sup> peaks across retention time, within a given m/z
+range.
+Building the XIC itself is the responsibility of the backend application (MS<sup>1</sup> information is not stored in the run object).
+<p>The originality of XIC in fishtones.js is that it can also hold filtered MS/MS spectrum, and a
+    <code>RichSequence</code> (although this latter parameter will be of some interest in the <a
+            href="match.html">match</a> section).
+</p>
+
+<p>An <code>XIC</code> is built via an <code>Injection</code> object (holding the MS/MS run information together
+    with mass error tolerance). The main access function (used in the following examples) is <code>injection.chromatoXIC(mass,
+        option)</code>.</p>
+
+<p>An XIC object holds:
+<ul>
+    <li><code>retentionTimes</code>: (Array[Float]);</li>
+    <li><code>intensities</code>: (Array[Float]), with the same length as <code>retentionTimes</code>;</li>
+    <li><code>name</code>: (String) description;</li>
+    <li><code>injection</code>: (Injection) the source injection object;</li>
+    <li><code>msms</code>: (Object, optional) containing the MS/MS information. All arrays must have the same length:
+        <ul>
+            <li><code>expSpectra</code>: (ExpMSMSSpectrumCollection) fragmentation spectra list, with peaks;</li>
+            <li><code>retentionTimes</code>: (Array[Float]) extracted retention times of the spectra;</li>
+            <li><code>intensities</code>: (Array[Float]) XIC interpolates intensities for the fragmentation spectra.
+            </li>
+        </ul>
+    </li>
+</ul>
+</p>
+<div class="sample-code" sample="xic-list">
+    <h4>load an XIC and display MS/MS information</h4>
+</div>
+<h3>Visualization</h3>
+
+<p>An XIC can be rendered within a <code>fishtones.wet.XICView</code>. It view proposes a zoomable widget. Zoom in by dragging the mouse and
+    out by
+    double clicking.</p>
+
+<p>Richer viewing widgets are demonstrated on the <a href="match.html">match</a> page, displaying at once several
+    chromatograms in various manners, together with peptide alignment.
+</p>
+
+<div class="sample-code" sample="xic-viz" with_visualization="true">
+    <h4>visualizing one XIC (drag to zoom in)</h4>
+</div>
+
+</div>
+<div class="col-md-3" id="myScrollspy">
+    <ul class="nav nav-tabs nav-stacked affix-nav" id="affix-nav">
+        <li class="active"><a href="#introduction">Introduction</a></li>
+        <li class="active"><a href="#server-side-aspects">Server side aspects</a></li>
+        <li><a href="#msms-spectra">Tandem mass spectra</a>
+            <ul class="nav  nav-stacked  affix-nav">
+                <li><a href="#msms-async">Asynchronous loading</a></li>
+                <li><a href="#msms-viz">Visualization</a></li>
+            </ul>
+        </li>
+        <li class="active"><a href="#msrun">MS/MS runs</a></li>
+        <li class="active"><a href="#injections">Injections</a></li>
+        <li class="active"><a href="#xic">XIC</a></li>
+    </ul>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

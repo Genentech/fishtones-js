@@ -1,0 +1,114 @@
+<project name="fishtones" default="unit-test">
+    <property name="app.name" value="${ant.project.name}"/>
+    <property name="bin.phantomjs" value="phantomjs"/>
+    <property name="bin.nodejs" value="node"/>
+    <property name="targetDir" value="target"/>
+    <property name="dir.target.unit" value="${targetDir}/test/unit"/>
+    <property name="buildDir" value="${targetDir}/build"/>
+    <property name="srcDir" value="src"/>
+    <property name="exampleDir" value="howto"/>
+    <property name="dist.src.archive" value="${targetDir}/dist/${app.name}.tgz"/>
+    <property name="dist.dist.archive" value="${targetDir}/dist/${app.name}-dist.zip"/>
+
+
+    <target name="package" depends="bundle-clean,bundle-css,build-library-bundle,build-library-amd"/>
+
+    <target name="dist" depends="package,dist-src,dist-dist"/>
+    <target name="dist-src">
+        <mkdir dir="${targetDir}/dist"/>
+        <tar destfile="${dist.src.archive}"
+             baseDir="${srcDir}"
+             excludes=".*,include/**"
+             compression="gzip"
+                />
+    </target>
+    <target name="dist-dist">
+        <mkdir dir="dist"/>
+        <zip destfile="${dist.dist.archive}">
+            <zipfileset dir="dist" includes="*.css,*.js" prefix="dist"/>
+            <zipfileset dir="." includes="bower.json"/>
+        </zip>
+    </target>
+    <target name="dist-optimize" depends="clean,r-optimize">
+        <mkdir dir="${targetDir}/dist"/>
+        <tar destfile="${dist.src.archive}"
+             basedir="${buildDir}"
+             excludes=".*,include/**"
+             compression="gzip"
+                />
+    </target>
+    <target name="r-optimize">
+        <exec executable="${bin.nodejs}" failonerror="true">
+            <arg value="lib/r.js"/>
+            <arg value="-o"/>
+            <arg value="app.build.js"/>
+        </exec>
+    </target>
+    <target name="unit-test" depends="clean">
+        <mkdir dir="${dir.target.unit}"/>
+        <exec executable="${bin.phantomjs}" dir="${dir.target.unit}">
+            <arg value="${basedir}/test/lib/jasmine2-runner.js"/>
+            <arg value="${basedir}/test/unit/phantom-index.html"/>
+        </exec>
+    </target>
+    <target name="junit-html" depends="unit-test">
+        <junitreport todir="${dir.target.unit}">
+            <fileset dir="${dir.target.unit}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir=".${dir.target.unit}/html"/>
+        </junitreport>
+    </target>
+    <target name="clean">
+        <delete failonerror="false" dir="${targetDir}"/>
+        <mkdir dir="${targetDir}"/>
+    </target>
+
+    <target name="build-library-bundle">
+        <exec executable="${bin.nodejs}" failonerror="true">
+            <arg value="lib/r.js"/>
+            <arg value="-o"/>
+            <arg value="build-utils/build-library-bundle.js"/>
+            <arg value="name=../../build-utils/almond"/>
+        </exec>
+    </target>
+    <target name="build-library-amd">
+        <exec executable="${bin.nodejs}" failonerror="true">
+            <arg value="lib/r.js"/>
+            <arg value="-o"/>
+            <arg value="build-utils/build-library-amd.js"/>
+        </exec>
+    </target>
+    <target name="bundle-css">
+        <copy file="src/css/fishtones.css" tofile="dist/fishtones-js.css"/>
+    </target>
+    <target name="bundle-clean">
+        <delete failonerror="false" dir="dist"/>
+        <mkdir dir="dist"/>
+    </target>
+
+    <!-- we prefere hard copy the third party dependencies into the example dir to make it standalone-->
+    <target name="build-examples" depends="package">
+        <copy todir="${exampleDir}/lib" flatten="true" verbose="true">
+            <resources>
+                <file file="bower_components/bootstrap/dist/js/bootstrap.min.js"/>
+                <file file="bower_components/jquery/jquery.min.js"/>
+                <file file="bower_components/jquery/jquery.js"/>
+                <file file="bower_components/jquery/jquery.min.map"/>
+                <file file="bower_components/underscore/underscore.js"/>
+                <file file="dist/fishtones-js-bundle-min.js"/>
+
+            </resources>
+        </copy>
+        <copy todir="${exampleDir}/css" flatten="true" verbose="true">
+            <resources>
+                <file file="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+                <file file="dist/fishtones-js.css"/>
+            </resources>
+        </copy>
+        <copy todir="${exampleDir}/fonts">
+            <fileset dir="bower_components/bootstrap/dist/fonts"/>
+
+        </copy>
+    </target>
+</project>

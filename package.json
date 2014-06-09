@@ -1,0 +1,27 @@
+{
+  "name": "fishtones",
+  "version": "0.0.1",
+  "description": "LC/MSMS libraries, dry, wet & match",
+  "maintainers": [
+    "Alexandre Masselot <masseloa@gene.com>"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "main": "app.build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Genentech/fishtones-js"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/Genentech/fishtones-js/issues"
+  },
+  "homepage": "https://github.com/Genentech/fishtones-js"
+}

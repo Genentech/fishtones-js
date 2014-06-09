@@ -1,0 +1,22 @@
+
+Enzyme: 
+<table>
+	<thead>
+		<th></th>
+		<th>accession code</th>
+		<th>name</th>
+		<th>length</th>
+	</thead>
+	<tbody>
+	<% _(list).each(function(seq) { %>
+		
+		<tr>
+			<td><input type='radio' name='seqid' class='params'/></td>
+			<td> <%= seq.get('accessionCode') %></td>
+			<td> <%= seq.get('name') %></td>
+			<td> <%= seq.get('length') %></td>
+			
+		</tr>
+	<% }); %>
+	</tbody>
+</table>

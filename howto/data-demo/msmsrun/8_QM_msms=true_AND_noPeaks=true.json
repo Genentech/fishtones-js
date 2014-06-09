@@ -1,0 +1,62 @@
+{
+   "id": 8,
+   "msmsSpectra": [
+      {
+         "id": 81122,
+          "precMoz": 653.76800537,
+         "precIntensity": 666836,
+         "retentionTime": 2019.26,
+         "scanNumber": 3103,
+         "precCharge": 5,
+         "size": 128
+      },
+      {
+         "id": 81123,
+         "precMoz": 623.84124756,
+         "precIntensity": 201618,
+         "retentionTime": 3635.42,
+         "scanNumber": 6634,
+         "precCharge": 2,
+         "size": 48
+      },
+      {
+         "id": 81124,
+         "precMoz": 428.76528931,
+         "precIntensity": 966640,
+         "retentionTime": 1726.99,
+         "scanNumber": 2476,
+         "precCharge": 2,
+         "size": 67
+      },
+      {
+         "id": 81125,
+         "precMoz": 775.05810547,
+         "precIntensity": 106723,
+         "retentionTime": 3807.39,
+         "scanNumber": 7091,
+         "precCharge": 3,
+         "size": 44
+      },
+      {
+         "id": 81126,
+         "precMoz": 463.77310181,
+         "precIntensity": 41310.3,
+         "retentionTime": 1647.55,
+         "scanNumber": 2303,
+         "precCharge": 2,
+         "size": 128
+      },
+      {
+         "id": 81127,
+         "precMoz": 459.77813721,
+         "precIntensity": 91890.3,
+         "retentionTime": 4649.07,
+         "scanNumber": 8627,
+         "precCharge": 2,
+         "size": 43
+      }
+   ],
+   "name": "file://a/b/c/xyz.raw"
+}
+
+

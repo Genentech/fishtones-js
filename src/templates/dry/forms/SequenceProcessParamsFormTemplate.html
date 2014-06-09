@@ -1,0 +1,18 @@
+
+Enzyme: 
+<select class='param' name="cleavageEnzyme">
+	<% _(enzymes).each(function(ce) { %>
+	<option value="<%= ce.get('name') %>" <% if(ce.get('name') == selected.get('cleavageEnzyme')){ %> selected="selected" <% }  %> >
+		<%= ce.toString() %>
+    </option>
+	<% }); %>
+</select>
+
+Max missed cleavages
+<select class='param' type='integer' name="maxMissedCleavages">
+	<% _([0,1,2,3,4,5]).each(function(i) { %>
+	<option value="<%= i %>" <% if(i == selected.get('maxMissedCleavages')){ %> selected="selected" <% }  %> >
+		<%= i %>
+		</option>
+	<% }); %>
+</select>

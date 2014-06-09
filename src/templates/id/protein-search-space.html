@@ -1,0 +1,54 @@
+<div class='protein-search-space form-horizontal'>
+    <div class="control-group">
+        <label class="control-label" for="sequence">name</label>
+        <div class="controls">
+            <input type="text" id="name" name="name" class='field-holder input-xlarge' value="change me" >
+            </input>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="sequence">protein</label>
+        <div class="controls">
+            <input type="text" id="sequence" name="sequence" class='field-holder input-block-level' placeholder="ex: name such as 'H3' or amino acid sequence">
+            </input>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="range">sequence range</label>
+        <div class="controls form-inline">
+            <div class="input-prepend">
+                <span class="add-on">from</span>
+                <input  id="rangeFrom" class="input-mini" name="from" type="text" placeholder="start aa">
+            </div>
+            <div class="input-prepend">
+                <span class="add-on">to</span>
+                <input  id="rangeTo" class="input-mini" name="to" type="text" placeholder="end aa">
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button class="btn btn-primary" id="but-go">
+                Get sequence
+            </button>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="sequence">build pipeline</label>
+        <div class="controls">
+            <div  id="pipeline-steps" name="pipeline" class='' ></div>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sequence">Pipeline</label>
+        <div class="controls">
+            <div id="pipeline">
+
+            </div>
+        </div>
+    </div>
+
+</div>

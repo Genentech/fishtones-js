@@ -1,0 +1,143 @@
+img.img-index-circle{
+    border-radius:50%;
+    border-color:gray;
+    border-width:1px;
+    border-style: solid;
+}
+
+div.jumbotron h1 {
+    font-size: 62;
+    font-weight: bold;
+}
+
+div.jumbotron {
+    padding-top: 68;
+}
+
+div.sample-results {
+    border: 1px solid gray;
+    margin-left: 1.5em;
+    margin-right: 0em;
+    padding: 5px;
+}
+
+div.api div.code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 90%;
+    color: #c7254e;
+}
+
+div.api div.doc {
+    padding-left: 3em;
+}
+
+h4.hide-block {
+    font-size: 110%;
+}
+
+h4.hide-block span.btn {
+    display: inline-block;
+    width: 12em;
+    text-align: left;
+}
+
+div#footer {
+    margin-top: 1em;
+    padding: 0.5em;
+    background: #eee;
+    border-top: 1px solid darkgray;
+}
+
+.app-snapshot img{
+    width:100%;
+    border:1px solid gray;
+}
+
+.app-snapshot h3{
+    text-align: center;
+}
+
+.app-snapshot p{
+    text-align: justify;
+    padding-left:1em;
+    padding-right:1em;
+    padding-top:0.5em;
+}
+/*
+ affix style has to been set explicitely
+ the padding/margin +-60 is to accomodate with the header
+*/
+
+@media print {
+    #myScrollspy {
+        display: none;
+    }
+}
+
+.affix-anchor {
+    padding-top: 80px;
+    margin-top: -60px;
+}
+
+h2.affix-anchor:first-of-type {
+    margin-top: 0px;
+}
+
+.nav-tabs.affix-nav {
+    border: none;
+}
+
+.nav.affix-nav > .active > a, .nav.affix-nav > .active:hover > a, .nav.affix-nav > .active:focus > a, .nav-tabs.affix-nav > li.active > a, .nav-tabs.affix-nav > li.active > a:hover, .nav-tabs.affix-nav > li.active > a:focus {
+    color: #563d7c;
+    border-left: 2px solid #5cb85c;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0;
+}
+
+.nav-tabs.affix-nav > li > a:hover, .nav.affix-nav > li > a:hover {
+    border-left: 1px solid #5cb85c;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0;
+}
+
+.nav-tabs.affix-nav > li > a, .nav > li > a {
+    border-left: 1px solid transparent;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0;
+}
+
+.nav.affix-nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.nav.affix-nav .nav.affix-nav > li > a {
+    padding-left: 40px;
+}
+
+ul.nav-tabs.affix-nav {
+    top: 60px; /* Set the top position of pinned element */
+}
+
+ul.nav-tabs.affix-nav-top {
+    top: 60px; /* Set the top position of pinned element */
+}
+
+.affix-top {
+    position: fixed;
+}
+
+.nav.affix-nav > li > a {
+    font-size: 13px;
+    font-weight: 500;
+    color: #999;
+    padding: 4px 20px;
+}
+
+/*-----*/

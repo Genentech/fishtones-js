@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>fishTones-js/dry</title>
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/fishtones-js.css"/>
+
+    <script src="lib/fishtones-js-bundle-min.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/underscore.js"></script>
+
+    <script src="howto-utils.js"></script>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy" style="margin:60">
+
+<div class="container">
+<div class="row">
+<div class="col-md-9">
+<h2 id="introduction" class="affix-anchor">Introduction</h2>
+
+The dry package handles all matters related to theoretical computations.
+Dictionaries are available to hold amino acids, residue modifications and cleavage enzymes.
+Protein and peptides can be build in various manners.
+Finally, theoretical intact masses and fragmentation spectra be computed.
+<p>
+    Almost all components in the fishTone.js library extend the versatile <a
+        href="http://backbonejs.org">backbone.js</a> models,
+    collections or views.
+</p>
+
+<h2 id="resmod" class="affix-anchor">Residue Modifications</h2>
+
+A residue modification handles any type of mass shift that can be added at a given position on a peptide.
+An object contains at least three properties:
+<ul>
+    <li><code>name</code>: a string, unique across all modifications;</li>
+    <li><code>fullName</code>: a description string;</li>
+    <li><code>mass</code>: a numerical value for the associated monoisotopic mass shift.</li>
+</ul>
+Being JavaScript, there are not limitations in adding other properties (for example the atomic composition).
+
+<h3>Dictionary</h3>
+Following the uniqueness of modification names, the creation and access goes through a dictionary <code>fishtones.dry.ResidueModificationDictionary</code>.
+However, the default dictionary is loaded with public modifications from the <a
+        href="http://www.unimod.org/">unimod repository</a> plus several custom ones, mainly aimed at labeling.
+The <code>ResidueModificationDictionary</code> extends <a href="http://backbonejs.org/#Collection">a
+    Backbone collection</a> and offers all the attached methods.
+
+<div class="sample-code" sample="one-modif">
+    <h4>add one modification</h4>
+</div>
+<div class="sample-code" sample="residue-modification-list">
+    <h4>list a few modifications</h4>
+</div>
+
+<h2 id="amino-acids" class="affix-anchor">Amino acids</h2>
+
+Following the same schema as residue modifications, an amino acid contains at least two properties:
+<ul>
+    <li><code>code1</code>: the unique one letter abbreviation</li>
+    <li><code>mass</code>: a numerical value for the associated monoisotopic mass.</li>
+</ul>
+As for modifications, amino acids can be created, modified or deleted via the associated dictionary <code>fishtones.dry.AminoAcidDictionary</code>.
+<div class="sample-code" sample="amino-acids">
+    <h4>inserting and listing amino acids</h4>
+</div>
+
+<h2 id="peptides" class="affix-anchor">Peptides</h2>
+Peptides are amino acid sequences associated with positional residue modifications.
+In the data structure, there is no limit on the number of modifications placed on the N/C termini and
+lateral chains.
+Peptides are handled via the <code>fishtones.dry.RichSequence</code> prototype, and although the preferred
+instanciation mechanism is via the string described in the syntax sub section below, there is an available access
+API. The main methods are described below.
+<br/>Positioning modifications is a key issue. For a peptide of <code>len</code> amino acids, we follow the
+convention:
+<ul>
+    <li><code>pos = -1</code>: N terminus,</li>
+    <li><code>pos = len</code>: C terminus,</li>
+    <li><code>pos >= 0 and < len</code>: lateral chain.</li>
+</ul>
+
+<div class="api-block">
+    <div class="api">
+        <div class="code">var peptide = new fishtones.dry.RichSequence()</div>
+        <div class="doc">Creates a new <code>RichSequence</code> object.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">peptide.fromString(str:String)</div>
+        <div class="doc">Defines sequence and modifications from the given string (see examples in the <a href="#peptides-syntax">syntax</a> sub
+            section).
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">peptide.toString()</div>
+        <div class="doc">Output a string, in the sample format as parsed by the <code>fromString</code> method.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">peptide.clone()</div>
+        <div class="doc">Returns a deep clone of the given peptide.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">peptide.aaAt(pos:Int)</div>
+        <div class="doc">Returns the amino acid defined at the given position.</div>
+    </div>
+    <div class="api">
+        <div class="code">peptide.addModification(pos:Int, modif:(String|ResidueModification))</div>
+        <div class="doc">Adds a positioned modification, either through its name (the dictionary is implicit)
+            or by full object.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">peptide.modifAt(pos:Int)</div>
+        <div class="doc">Returns the array of modifications defined at the given positions.</div>
+    </div>
+    <div class="api">
+        <div class="code">peptide.countModificationsAt(pos:Int)</div>
+        <div class="doc">Returns the number of modifications at the given position\\.</div>
+    </div>
+</div>
+<h3 id="peptides-syntax" class="affix-anchor">Syntax</h3>
+Specifying a peptide via <code>new fishtones.dry.RichSequence().fromString(str)</code> is the most common
+entry point. We demonstrate here the
+possibilities of the parsing via a series of examples.
+<table class="table">
+    <thead>
+    <tr>
+        <th>String</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>PKPTIDER</code></td>
+        <td>unmodified sequence.</td>
+    </tr>
+    <tr>
+        <td><code>PKPT{Phospho}IDER</code></td>
+        <td>one modification, where the name relates to those defined in the
+            <code>ResidueModificationDictionary</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>PK{Propionylation,Methyl}PTIDER</code></td>
+        <td>with multiple modifications on the same amino acid.</td>
+    </tr>
+    <tr>
+        <td><code>{Propionylation}-PKPTIDER-{Deamnidated}</code></td>
+        <td>with N & C terminus modifications (the <code>"-"</code> symbol is optional for the N terminus one).
+        </td>
+    </tr>
+    <tr>
+        <td><code>PKPTID{123.456}ER</code></td>
+        <td>with a mass shift defined modification.</td>
+    </tr>
+    </tbody>
+</table>
+Fully describing a peptide can become cumbersome in some situation such as labelling, both from the creation
+point and more importantly from the end user output perspective. We describe in the following section
+different ways to express peptides in more compact and readable ways.
+
+<h3 id="peptides-implicit" class="affix-anchor">Labeling & implicit modifications</h3>
+Some modifications can be defined through labelling, such as <em>SILAC</em> or <em>Propionylation</em> that
+will be applied following predefined rules on a given peptide.
+For example <em>prop_d0</em> of a peptide implies add the <code>Propionyl</code> modification on
+the N terminus and any Lysine. However a Lysine already modified cannot received the propionylation one
+except if the original modification is a single methylation <code>Methyl</code>. These rules, together with
+the order in which labelling methods are applied are defined through the <code>fishtones.dry.ImplicitModifier</code>
+service.
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Original peptide</th>
+        <th>Label</th>
+        <th>Explicit peptide</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>PKPTIDER</code></td>
+        <td>none</td>
+        <td><code>PKPTIDER</code></td>
+    </tr>
+    <tr>
+        <td><code>PKPTIDER</code></td>
+        <td>silac</td>
+        <td><code>PK{Label:13C(6)15N(2)}PTIDER{Label:13C(6)15N(4)}</code></td>
+    </tr>
+    <tr>
+        <td><code>PKPTIDER</code></td>
+        <td>prop_d0</td>
+        <td><code>{Propionyl}PK{Propionyl}PTIDER</code></td>
+    </tr>
+    <tr>
+        <td><code>PKPTIDER</code></td>
+        <td>prop_d5_nterm</td>
+        <td><code>{Propionyl:2H(5)}PK{Propionyl}PTIDER</code></td>
+    </tr>
+    <tr>
+        <td><code>PK{Methyl}PTIDER</code></td>
+        <td>prop_d0</td>
+        <td><code>{Propionyl}PK{Methyl,Propionyl}PTIDER</code></td>
+    </tr>
+    <tr>
+        <td><code>PK{Dimethyl}PTIDER</code></td>
+        <td>prop_d0</td>
+        <td><code>{Propionyl}PK{Dimethyl}PTIDER</code></td>
+    </tr>
+    <tr>
+        <td><code>PKPT</code></td>
+        <td>13C15N</td>
+        <td><code>P{13C15N-P}K{13C15N-K,Acetyl}P{13C15N-P}T{13C15N-T}</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>As illustrated in the code example below, it is possible to apply multiple labels to a peptide.</p>
+<div class="api-block">
+    <div class="api">
+        <div class="code">var implModifier = fishtones.dry.ImplicitModifier</div>
+        <div class="doc">Set a shortcut to the <code>ImplicitModifier</code> singleton.</div>
+    </div>
+    <div class="api">
+        <div class="code">implModifier.availableLabels()</div>
+        <div class="doc">Returns a list of the available labels.</div>
+    </div>
+    <div class="api">
+        <div class="code">implModifier.label(labels:{String|Array[String]}, peptide:RichSequence)</div>
+        <div class="doc">Modifies peptide by adding the modifications defined by given labels.</div>
+    </div>
+    <div class="api">
+        <div class="code">implModifier.isLabeled(label, peptide:RichSequence)</div>
+        <div class="doc">Returns <code>true</code> if the peptide follows the rule specified by the given label.</div>
+    </div>
+    <div class="api">
+        <div class="code">implModifier.unlabel(labels:{String|Array[String]}, peptide:RichSequence)</div>
+        <div class="doc">Modifies peptide by removing all the modification inferred by the given labels.</div>
+    </div>
+    <div class="api">
+        <div class="code">implModifier.getLabelsAndClean(peptide:RichSequence)</div>
+        <div class="doc">Removes all modifications from peptide following some label rules and returns the list of such
+            labels.
+        </div>
+    </div>
+</div>
+<div class="sample-code" sample="implicit-modifier">
+    <h4>apply & reversing labels</h4>
+</div>
+
+
+<h3 id="peptides-shortcuts" class="affix-anchor">Shortcuts</h3>
+Finally, two more levels of peptide description can be applied, for the sake of better communication. Once more, the
+function transforming one peptide into its shortcut form must be bijective. This string compression is achieved by a
+<code>fishtones.dry.RichSequenceShortcuter</code> instance.
+
+<h4>Modification shortcut</h4>
+Common modification, such as methylations or acetylation can be compacted into <code>Me, Me2, Me3, Ac</code>. Therefore,
+Instead of <code>PK{Acetyl}PTIDER</code> can be written as <code>PKAcTIDER</code>. If the applied transformation uses
+modification name as an uppercase letter followed by one or many lowercase characters and numbers, so that it can not be
+mistaken for the amino acid sequence.
+<p/>
+Moreover, the applied implicit label(s) can be specified and a supplementary string between square brackets, such as
+<code>PKAcPTIDER [silac]</code>.
+
+<div class="sample-code" sample="peptide-shortcut-modif">
+    <h4>modification abbreviations</h4>
+</div>
+
+<h4>Protein reference shortcut</h4>
+Pursuing our quest for the most compact and readable peptide description, we can also refer to a list of preloaded
+proteins. If a list of proteins is set in the <code>fishtones.dry.AASequenceDictionary</code>, peptides can be
+referenced through their position and the protein name and a cleavage enzyme (default is trypsin). For example, if
+histones proteins are listed and <code>arg-C</code> set as the cleavage enzyme, <code>KSAPATGGVKKPHR</code> can be
+referenced as <code>H3.1K27</code> as it <code>H3.1</code> would be the only protein containing this peptide.
+<p/>
+However, <code>KSTGGKAPR</code> is contained in all the proteins with a name starting with <code>H3</code>, therefore it
+can be reference as <code>H3K9</code>.
+<p/>Of course, this abbreviation can be pushed to modified peptide or even labeled ones:
+<table class="table">
+    <thead>
+    <tr>
+        <th>Shortcut</th>
+        <th>Explicit peptide</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>H3K4</code></td>
+        <td><code>TKQTAR</code></td>
+        <td>common to all H3*</td>
+    </tr>
+    <tr>
+        <td><code>H3K4Me2</code></td>
+        <td><code>TK{Dimethyl}QTAR</code></td>
+        <td>with a methylation</td>
+    </tr>
+    <tr>
+        <td><code>H3.1K27</code></td>
+        <td><code>KSAPATGGVKKPHR</code></td>
+        <td>unique to H3K27</td>
+    </tr>
+    <tr>
+        <td><code>H3.1K36Ac</code></td>
+        <td><code>KSAPATGGVK{Acetyl}KPHR</code></td>
+        <td>ref by 36 as the modification lies there</td>
+    </tr>
+    <tr>
+        <td><code>H3.1K27MeK36Ac</code></td>
+        <td><code>K{Methyl}SAPATGGVK{Acetyl}KPHR</code></td>
+        <td>two modifications</td>
+    </tr>
+    <tr>
+        <td><code>H3.1K27MeK36Ac [prop_d0]</code></td>
+        <td><code>{Propiony}-K{Methyl,Propionyl}SAPATGGVK{Acetyl}KPHR</code></td>
+        <td>with implicit labeling</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="api-block">
+    <div class="api">
+        <div class="code">var rss = new fishtones.dry.RichSequenceShortcuter(options:Map);</div>
+        <div class="doc">Creates a new shortcuter instance. The <code>options</code> map can specify <code>cleavageEnzyme</code>
+            by name.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">rss.richSeqFrom(str:String, [peptide:RichSequence])</div>
+        <div class="doc">Unpack the condensed version into a <code>RichSequence</code>. If the second optional argument
+            is passed, it will be altered and no new object will be created.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">rss.richSeqToString(pept:RichSequence)</div>
+        <div class="doc">Compresses a peptide by projecting modifications into shorter abbreviation if possible.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">rss.rss.richSeqToSequencePtr(pept:RichSequence)</div>
+        <div class="doc">Compresses a peptide into its shortest form, with sequence reference if possible.
+        </div>
+    </div>
+</div>
+
+<div class="sample-code" sample="peptide-shortcut-ptr">
+    <h4>with protein reference shortcuts</h4>
+</div>
+
+<h3 id="peptide-input-widget" class="has-visualization">Peptide input widget</h3>
+In some situations, entering a peptide sequence (via a shortcut or not) in a programmatic manner is not possible. The
+<code>fishtones.dry.RichSequenceInput</code> widget proposes an input text field, linked with a button only available if
+the sequence is correct and several callbacks. The following example demonstrate some features.
+
+<div class="sample-code" sample="richsequence-input" with_visualization="true">
+    <h4>interactive peptide input</h4>
+</div>
+
+<h2 id="theoretical-masses" class="affix-anchor">Theoretical masses</h2>
+As fishTones.js is aimed at solving mass spectrometry data, once peptide has been defined, it is possible to computed
+masses.
+<code>fishtones.dry.MassBuilder</code> is the service producing both intact masses and fragmentation spectra. The input
+is a <code>RichSequence</code> object, but as seen above, it can be created in many ways.
+
+<h3 id="theoretical-mass-intact" class="affix-anchor">Intact masses</h3>
+A peptide intact sequence is computed via <code>MassBuilder.computeMassRichSequence(peptide, [charge])</code> with
+high precision. If <code>charge</code> is given, the charged mass will be return. Otherwise MH will be the answer.
+
+<div class="sample-code" sample="massbuilder-intact">
+    <h4>various mass charges</h4>
+</div>
+
+<h3 id="theoretical-fragmentation-spectra" class="affix-anchor">Fragmentation spectra</h3>
+A theoretical spectrum is computed via <code>MassBuilder.computeTheoSpectrum(peptide)</code>. By default, this will
+produce a <code>TheoSpectrum</code> object, containing a list of <code>peaks</code> with 4 properties on each:
+<ul>
+    <li><code>label</code>: describing the peak, such as <code>b++4</code>;</li>
+    <li><code>moz</code>: the predicted m/z;</li>
+    <li><code>series</code>: the fragmentation series, such as <code>b++</code>;</li>
+    <li><code>position</code>: the position of the related amino acid, starting at <code>0</code>.</li>
+</ul>
+
+<p>By default, <code>b</code> and <code>y</code> fragmentation series are produced, both simply and doubly charged.</p>
+<div class="sample-code" sample="massbuilder-fragmentation">
+    <h4>computing a theoretical fragmentation spectrum</h4>
+</div>
+
+<h3 id="theo-frag-spectra-viz" class="has-visualization">Visualizing a theoretical spectrum</h3>
+<code>fishtones.dry.TheoOnSequenceView</code> displays a theoretical spectrum in a graphical manner on the sequence.
+
+<div class="sample-code" sample="theo-spectrum-view" with_visualization="true">
+    <h4>visualizing theoretical spectrum</h4>
+</div>
+
+</div>
+<div class="col-md-3" id="myScrollspy">
+    <ul class="nav nav-tabs nav-stacked affix-nav" id="affix-nav">
+        <li class="active"><a href="#introduction">Introduction</a></li>
+        <li><a href="#resmod">Residue modifications</a></li>
+        <li><a href="#amino-acids">Amino acids</a></li>
+        <li><a href="#peptides">Peptides</a>
+            <ul class="nav  nav-stacked  affix-nav">
+                <li><a href="#peptides-syntax">Syntax</a></li>
+                <li><a href="#peptides-implicit">Labeling</a></li>
+                <li><a href="#peptides-shortcuts">Shortcuts</a></li>
+                <li><a href="#peptide-input-widget">Input widget</a></li>
+            </ul>
+        </li>
+        <li><a href="#theoretical-masses">Theoretical masses</a>
+            <ul class="nav  nav-stacked  affix-nav">
+                <li><a href="#theoretical-mass-intact">Intact peptide mass</a></li>
+                <li><a href="#theoretical-fragmentation-spectra">Fragmentation spectra</a></li>
+                <li><a href="#theo-frag-spectra-viz">Visualizing a spectrum</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

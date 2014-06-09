@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>fishTones-js/more</title>
+    <link rel="shortcut icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/fishtones-js.css"/>
+
+    <script src="lib/fishtones-js-bundle-min.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/underscore.js"></script>
+
+    <script src="howto-utils.js"></script>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy" style="margin:60">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <h2 class="affix-anchor">FishTones.js: built for real life</h2>
+
+            <p>
+                fishTones.js library has been originally developed to sustain research applications in proteomics at
+                Genentech. Building tools to analyze complex mass spectrometry data was the drive to desgign the
+                features
+                presented across these pages.
+            </p>
+
+            <p>
+                However, we have not made here an exhaustive tour of all fishTones.js features. More are demonstrated in
+                the unit test page (see <a href="http://github.com/genentech/fishtones-js">github README</a>). Among
+                them are for example widgets to display multiple XIC tracks, interactively measure XIC peak AUC ratios,
+                some basic statistics and maths functions and much more.
+            </p>
+
+            <h2 id="altering-rendering" class="affix-anchor">Altering rendering</h2>
+
+            <p>Embedding widgets into different context often mean to adapt the rendering. Either by adapting the style
+                to a particular web application or exporting images to presentations or papers.
+            </p>
+
+            <h3 id="css-edition" class="affix-anchor">CSS edition</h3>
+
+            <p>fishTones.js widgets are designed to be included in web application. To adapt any rendering aspect
+                (color, font, line width etc.), the easiest way is to create a <code>css</code> file and import it after
+                <code>css/fishtones-js.css</code>. For mere mortals, css is more a matter of trial and errors, so Chrome
+                developer tools or firebug will be your best friend!</p>
+
+            <h3 id="export-svg" class="affix-anchor">Exporting to SVG</h3>
+
+            <p>
+                As soon as a graph is rendered on a screen a scientist will come and ask how to export it for a paper. A
+                raster image might not fit many journals preferring vector format. Fortunately enough, widgets are
+                built in <a href="http://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG</a> and can be therefore
+                imported into vector graphic editor tools such as Inkscape or Adobe Illustrator (it's sad to say so, but
+                Illustrator looks to handle better some fancy SVG exports here).
+            </p>
+
+            <p>The easiest way to export SVG is to use Mike Bostock (the creator of <a href="http://d3js.org">d3.js</a>)
+                <a href="http://nytimes.github.io/svg-crowbar/">svg
+                    crowbar</a>. Simply add the link on your bookmark tool bar, and click on it when you are on a web
+                page. Save buttons will appear over each rendered widget on the page.</p>
+
+            <h2 id="more-app" class="affix-anchor">More applications</h2>
+
+            <p>Multiple applications have been internally developed to support research scientists at Genentech, based
+                on fishTones.js. Here are snapshots from a several of them, to illustrate how basic components can be
+                assemble together.</p>
+
+            <div class="row">
+                <div class="col-md-6 app-snapshot">
+                    <h3 id="app-spectra-match">Protein match</h3>
+                    <img src="images/howto-more-protein-match.png"/>
+
+                    <p>
+                        All the PSM for a protein across 4 runs are displayed via the open source <a
+                            href="https://github.com/Genentech/pviz">pViz.js</a> library. Identified peptides are plot
+                        as blue lines, and red circles stand for oxidation. It is possible to zoom in on the protein
+                        sequence, to click on peptide in order to review the annotated peptide or plot the targeted XICs.
+                    </p>
+                </div>
+                <div class="col-md-6 app-snapshot">
+                    <h3 id="app-cross-run-xic">XIC across runs</h3>
+                    <img src="images/howto-more-cross-run-xic.png"/>
+
+                    <p>
+                        Reviewing XIC for a given peptide across a series can be achieved. In this snapshot, we
+                        demonstrate the use of an internal retention time algorithm. Having the retention times aligned allow to
+                        one LC time range to be selected across all the runs and has proven efficient to measure
+                        multiple peptide abundance at once.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 app-snapshot">
+                    <h3 id="app-psm-elucidation">PSM elucidation</h3>
+                    <img src="images/howto-more-psm-elucidation.png"/>
+
+                    <p>
+                        Elucidating a peptide sequence (and modifications) is a tedious and repetitive task for mass
+                        spectrometrist. We developed a tool to facilitate this task, highlighting fragment distance
+                        with a know theoretical value (loss, modification, amino acid), linked to the edition of the
+                        peptide sequence.
+                    </p>
+                </div>
+                <div class="col-md-6 app-snapshot">
+                    <h3 id="app-fishing-tags">Fishing PSM tags</h3>
+                    <img src="images/howto-more-tag-finder.png"/>
+
+                    <p>
+                        Instead of identifying full peptides, a backend application can search for smaller peptide tags
+                        within one or more MS/MS runs. Peptide alignment are matched and spectra are aligned so that
+                        they all zoom in the same area.
+
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6 app-snapshot">
+                    <h3 id="app-spectra-network">Spectra network</h3>
+                    <img src="images/howto-more-network.png"/>
+
+                    <p>
+                        This graph represents spectra (gray circles) matching to each others and to peptides (orange
+                        circle). Red edges therefore represent PSM and black one SSM (the bolder ones indicate non
+                        trivial mass shifts). Vertices can be clicked to display details and edges to show the
+                        alignments.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3" id="myScrollspy">
+            <ul class="nav nav-tabs nav-stacked affix-nav" id="affix-nav">
+                <li class="active"><a href="#altering-rendering">Altering rendering</a>
+                    <ul class="nav  nav-stacked  affix-nav">
+                        <li><a href="#css-edition" style="letter-spacing:2px">CSS edition</a></li>
+                        <li><a href="#export-svg" style="letter-spacing:2px">SVG export</a></li>
+                    </ul>
+                </li>
+                <li class="active"><a href="#more-app">More applications</a>
+                    <ul class="nav  nav-stacked  affix-nav">
+                        <li><a href="#app-spectra-match" style="letter-spacing:1px">Protein match</a></li>
+                        <li><a href="#app-cross-run-xic" style="letter-spacing:1px">Cross run XIC</a></li>
+                        <li><a href="#app-psm-elucidation">PSM elucidation</a></li>
+                        <li><a href="#app-fishing-tags">Fishing PSM tags</a></li>
+                        <li><a href="#app-spectra-network">Spectra network</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

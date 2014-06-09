@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Jasmine@msms-dry</title>
+
+    <link rel="stylesheet" type="text/css" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <link rel="stylesheet" type="text/css" href="../../bower_components/jasmine/lib/jasmine-core/jasmine.css">
+
+    <!--
+      <link rel="stylesheet" type="text/css" href="../lib/jasmine.css">
+    <script type="text/javascript" src="../lib/jasmine.js"></script>
+    <script type="text/javascript" src="../lib/jasmine-html.js"></script>
+    -->
+    <script type="text/javascript" src="../../bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
+    <script type="text/javascript" src="../../bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+    <script type="text/javascript" src="./boot.js"></script>
+
+    <script src="../../bower_components/requirejs/require.js"></script>
+    <script src="../../src/js/require-config.js"></script>
+    <script src="jasmine-index.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../src/css/fishtones.css">
+
+    <style type="text/css">
+        div#dz {
+
+        }
+
+        div#dz div.block {
+            display: inline-block;
+            vertical-align: top;
+            border: black;
+            border-style: solid;
+            border-width: 1px;
+            margin: 10px
+        }
+
+        div.dz-folder {
+            zoom: 15%;
+        }
+
+        div.dz-folder:hover {
+            zoom: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Jasmine@msms-dry</h1>
+
+<div id='dz'></div>
+<script type="text/javascript">
+
+
+    function addDZDiv(folder, id, width, height) {
+        var divCont = $('<div class="block"><b>' + id + '</b><br/></div>');
+        var div = $('<div></div>');
+        divCont.append(div);
+
+        var rid = (id + '_' + Math.random()).replace('.', '_');
+        div.attr('id', rid);
+        div.height(height || 200);
+        div.width(width || 200);
+
+        var divFolder = $('#dz').find('div[name=' + folder + ']');
+        if (divFolder.size() == 0) {
+            divFolder = $('<div name="' + folder + '" class="dz-folder"></div>');
+            $('#dz').append(divFolder)
+
+        }
+
+        divFolder.append(divCont)
+        return div;
+    }
+
+    //    function addDZSvg(folder, id, width, height) {
+    //        var div = addDZDiv(folder, id, width, height);
+    //        var svg = $("<svg/>");
+    //        svg.attr("width", '100%').attr("height", '100%');
+    //        div.append(svg)
+    //        return svg;
+    //    }
+</script>
+
+<script type="application/javascript">
+    require(reqs, function ($, _, config) {
+
+        config.set('wet.url.rest', '/sinon')
+        _.templateSettings = {
+            interpolate: /\{\{(.+?)\}\}/g
+        };
+
+        $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+            console.error('ajaxerror ', jqXHR.url, ', ', ajaxSettings.url, ' : ', thrownError);
+            console.error(ajaxSettings)
+            throw {
+                name: 'AjaxError',
+                message: (jqXHR.url || ajaxSettings.url) + ' : ' + thrownError
+            }
+        });
+
+        window.executeTests()
+    });
+
+</script>
+
+</body>
+
+</html>

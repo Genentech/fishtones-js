@@ -1,0 +1,11 @@
+  //ok, that's jsut to fit togehter
+
+  //sorry for that, but I don't know how to make aliases
+  define('Backbone', ['backbone'], function(bb){
+    return bb;
+  });
+  
+  define('fishtones', ['MSMSJSExport'], function(fte){
+    return fte;
+  });
+}());

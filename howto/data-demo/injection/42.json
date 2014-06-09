@@ -1,0 +1,13 @@
+ {
+    "id" : 42,
+    "instrumentParams" : {
+        "id" : 27,
+        "fragmentTol" : 300,
+        "precursorTol" : 20
+    },
+    "name" : "x-C",
+    "runInfo" : {
+        "id" : 36609,
+        "name" : "file://a/b/c/xyz3.raw"
+    }
+}

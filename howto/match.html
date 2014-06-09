@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>fishTones-js/match</title>
+    <link rel="shortcut icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/fishtones-js.css"/>
+
+    <script src="lib/fishtones-js-bundle-min.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/underscore.js"></script>
+
+    <script src="howto-utils.js"></script>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy" style="margin:60">
+
+<div class="container">
+<div class="row">
+<div class="col-md-9">
+<h2 id="introduction" class="affix-anchor">Introduction</h2>
+
+<p>
+    From the visualization perspective, the match package is the richer one proposed within the fishTones.js
+    toolkit. It allows to compute and render Peptide/Spectrum matches (PSM) and Spectrum/Spectrum Matches
+    (SSM). Beside the classic views (annotated spectra), it offers a variety of more compact widgets, down
+    to the icon size. Colors are used to display, in a condensed manner, both the match coverage together with
+    the intensity of the aligned fragment peaks.
+</p>
+
+<h3>Computing mass errors</h3>
+<code>fishtones.utils.DeltaMass</code> is the utility to compute mass difference.
+<p>Although PPM is the default error unit in fishTones.js, it offers and functional entry point to several
+    common operations. The implementation tends to avoid the commonly observed error where <code>delta(m1,m2)
+        != -delta(m2-m1)</code>, by enforcing <code>deltaPPM = (m2-m1)/(m1+m2)*2000000</code>. The API for
+    the ppm error is described below (even though referring to the unit test will show plenty of examples).
+
+<div class="api-block">
+    <div class="api">
+        <div class="code">var ppm=fishtones.utils.DeltaMass.ppm
+        </div>
+        <div class="doc">Simply creates a shortcut to the ppm function.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">ppm.delta(x:Float, y:Float):Float</div>
+        <div class="doc">Error between <code>x</code> and <code>y</code>.</div>
+    </div>
+    <div class="api">
+        <div class="code">ppm.range(x:Float,tol:Float):[Float, Float]</div>
+        <div class="doc">Return <code>[xMin, xMax]</code>, the range around <code>x +/- tol</code>.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">ppm.isCloseTo(x, tol, candidate):Boolean</div>
+        <div class="doc">Returns true if <code>candidate</code> is closer to <code>x</code> than
+            <code>tol</code>.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">ppm.isCloseTo(x, tol):(Float => Boolean)</div>
+        <div class="doc">Returns a <a href="http://en.wikipedia.org/wiki/Currying">curried function</a>
+            <code>f</code>, where <code>f(candidate)</code> is equivalent to <code>f(x, tol,
+                candidate)</code>. Beside time saving if the same <code>(x, tol)</code> are passed
+            multiple times, it allows to pass <code>f</code> as an argument to other functions without
+            carrying along all the parameters.
+        </div>
+    </div>
+</div>
+
+<h2 id="psms" class="affix-anchor">Peptide/Spectrum Matches (PSM)</h2>
+
+<p>A <code>fishtones.match.PSMAlignment</code> represents the alignment between a <code>RichSequence</code>
+    and an <code>ExpMSMSSpectrum</code>. This object will be the model of all the visualization widgets
+    described below.</p>
+
+<p>A <code>PSMSAlignment</code> extends the more general <code>fishtones.match.PeakListPairAlignment</code>,
+    which will match the closest peaks of two objects based on their <code>mozs</code> array properties.</p>
+
+<div class="api-block">
+    <div class="api">
+        <div class="code">var psm = new fishtones.match.PSMAlignment({richSequence:RichSequence,
+            expSpectrum:ExpMSMSSpectrum})
+        </div>
+        <div class="doc">Creates a new <code>PSMAlignment</code> based on a theoretical peptide (b/y series,
+            singly and doubly charged) and a <a href="dry.html#peptides">peptide</a>.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">psm.get('matches')
+        </div>
+        <div class="doc">Returns array of fragment matches, giving for each theoretical fragment the closest
+            experimental peak. There is no filtering by mass error at this level, as it occurs calling
+            the <code>closerThanPPM</code> function described below. Each fragment match is a map
+            containing:
+            <ul>
+                <li><code>theo</code>: the peptide <a href="dry.html##theoretical-fragmentation-spectra">theoretical
+                    peak</a>;
+                </li>
+                <li><code>exp</code>: a map containing
+                    <ul>
+                        <li><code>index</code>: the index of the matched peak within the experimental
+                            spectrum;
+                        </li>
+                        <li><code>moz</code>: the m/z of the matched peak;</li>
+                        <li><code>intensityRank</code>: the intensity rank of the matched peak;</li>
+                    </ul>
+                    The two last properties are redundant (they could be accessed via the
+                    <code>expSpectrum</code> and the <code>index</code> values, but it may be more
+                    convenient to have them at this level.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">psm.set('richSequence|expSpectrum', ...)
+        </div>
+        <div class="doc">Set either of the properties. This will trigger the recomputation of the
+            <code>matches</code> array.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">psm.closerThanPPM(errorThresPPM:float)
+        </div>
+        <div class="doc">returns the array of <code>matches</code> with an error lower or equal to the given
+            threshold.
+        </div>
+    </div>
+    <div class="api">
+        <div class="code">psm.unmatchedFactor(errorThresPPM:float, maxIntensityRank:int)
+        </div>
+        <div class="doc">returns the number of unmatched experimental peaks (modulo the given error
+            threshold in ppm), with an m/z larger than the precursor m/z and within the
+            <code>maxIntensityRank</code><sup>th</sup>
+            most intense peaks. This value is sometimes used as part of the PSM assessment.
+        </div>
+    </div>
+</div>
+
+<div class="sample-code" sample="psm-table">
+    <h4>build a PSM and print the first 5 fragment matches.</h4>
+</div>
+
+<h3 id="psm-spectrum">Annotated spectrum</h3>
+
+<p>The first view of a <code>PSMAlignment</code> object is a <code>fishtones.wet.ExpMSMSSpectrum</code>. It
+    represent the classic annotated spectrum, with the matched peaks labeled. Zoom along the x-axis can be
+    enabled and the green triangle represents the precursor m/z.</p>
+
+<div class="sample-code" sample="psm-spectrum" with_visualization="true">
+    <h4>PSM annotated spectrum (with zooming).</h4>
+</div>
+
+<h3 id="psm-table">Fragment table</h3>
+
+<p>Another classic PSM view is a table, available as a <code>fishtones.match.MatchGridValuesView</code>. It
+    introduces a color code based on the matched experimental peak intensity ranks, used across the following
+    widgets.</p>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div style="width:20%; background-color: red; float:left; padding:.3em"><strong>10 most
+            intense</strong></div>
+        <div style="width:20%; background-color: #ff9100; float:left; padding:.3em"><strong>11-20</strong>
+        </div>
+        <div style="width:20%; background-color: #ff0; float:left; padding:.3em"><strong>21-30</strong>
+        </div>
+        <div style="width:20%; background-color: #7df894; float:left; padding:.3em"><strong>31-40</strong>
+        </div>
+        <div style="width:20%; background-color: #99f; float:left; padding:.3em"><strong>above 40</strong>
+        </div>
+    </div>
+</div>
+
+<div class="sample-code" sample="psm-table-view" with_visualization="true">
+    <h4>PSM fragment table.</h4>
+</div>
+
+<h3 id="psm-strip">Strip icon</h3>
+
+<p>The previous table can be projected as a 2 dimensions icon. The two lines represents the N- and the
+    C-terminus series and the color follows the conventions previously described for the most intense matched peak.
+    Modified amino acids (unless under
+    a label inference) are boxed by a black rectangle. This allow to have an idea of
+    the peptide sequence coverage together with the intensity ranks of the matched fragment peaks. The number shows
+    the <code>psm.unmatchedFactor()</code> described in the <a href="psms">section</a> (the number of unmatched
+    peaks, among the 10 most intense, with the m/z greater than the precursor one.</p>
+
+<div class="sample-code" sample="psm-strip-view" with_visualization="true">
+    <h4>PSM in a 2D icon.</h4>
+</div>
+
+<h3 id="psm-pq">Interactive Wheel</h3>
+
+<p>The 2D strip icon can be further projected (N- and C- terminus series together) and represented as a disk icon
+    <code>fishtones.match.fishtones.match.MatchMapPQView</code>.
+    Even though, bad matches can be eliminated in a glance, mousing over will unroll the strip icon and click will open
+    the annotated spectrum.</p>
+
+<div class="sample-code" sample="psm-pq-view" with_visualization="true">
+    <h4>The unrolling view (mouse over and click).</h4>
+</div>
+
+<h3 id="psm-xic">XIC</h3>
+
+<p>The basic <code>fishtones.wet.XICView</code> presented in the <a href="wet.html#xic">wet</a> page allows also to
+    display PSM alignments, by adding a <code>richSequence</code> option to the <code>new({...})</code> statement.</p>
+
+<div class="sample-code" sample="xic-psm-viz" with_visualization="true">
+    <h4>XIC with PSM (drag to zoom and expand the view, mouse over and click).</h4>
+</div>
+
+<h4>Multiple superposed XIC</h4>
+
+<p>
+    It is possible to superpose several XIC in a single widget, with <code>fishtones.wet.MultiXICView</code>. In the
+    following example, two <code>target</code> (in practice 2 peptides) are displayed as red and blue. The charge states
+    are <code>2+</code> an <code>3+</code>, as the number of dots on the lines shows.
+</p>
+
+<p>
+    An <code>MultiXICView</code> model is a <code>fishtones.wet.XICCollection</code>. Each time an xic element is added
+    to the collection, a <code>render</code> event is trigger.
+</p>
+
+<div class="sample-code" sample="xic-multiple-psm-viz" with_visualization="true">
+    <h4>multiple XIC in the same view (zoom, mouse over and click).</h4>
+</div>
+
+<h2 id="ssms" class="affix-anchor">Spectrum/Spectrum matches</h2>
+
+<p>
+    Aligning spectra pair is another common pattern in mass spectrometry visualization. Following the same approach as
+    for peptides, we propose a classic spectra view and a more original strip icon.
+</p>
+
+<p>
+    As for <code>PSMAlignment</code>, we define the alignment of two spectra via <code>fishtones.match.SpectraPairAlignment</code>
+    between two instances of <code>ExpMSMSSpectrum</code>, <code>sp0</code> and <code>sp1</code>:
+    <pre>
+var ssm = new fishtones.match.SpectraPairAlignment({spectrumA : sp0, spectrumB : sp1});</pre>
+</p>
+<p><code>SpectraPairAlignment</code> also extend <code>PeakListPairAlignment</code>, therefore, methods like <code>matches()</code>
+    or <code>closerThanPPM(tol)</code> are available.</p>
+
+<h3 id="ssm-mirror" class="affix-anchor">Mirror alignment</h3>
+
+<p>The classic mirror view displays one spectrum on each side of the x-axis is achieved via a <code>fishtones.match.SpectraPairAlignmentView</code>
+    object. As they often carry the most relevant information, unmatched peaks are displayed with bolder lines. The option
+    <code>enhanced:true</code> displays a color bar code for aligned peaks in green, depending on the intensityRank. The
+    darker the green, the higher the intensity.</p>
+
+<div class="sample-code" sample="ssm-mirror-viz" with_visualization="true">
+    <h4>Two pairs of spectra (two from the same XIC peak, one from another).</h4>
+</div>
+
+<h3 id="ssm-strip" class="affix-anchor">Strip icon</h3>
+Mirrored spectra view are not suited when a lot of comparisons are to been made on a single page. Therefore, we propose a
+strip icon widget.
+Aligning the n most intense peaks of both spectra, it displays a red bar for unmatched peak and a green one for matched
+ones. To ensure a constant width, the green bar width is doubled. The most intense the bar, the higher the peak
+intensity.
+<div class="sample-code" sample="ssm-strip-viz" with_visualization="true">
+    <h4>The same two pairs of spectra.</h4>
+</div>
+</div>
+<div class="col-md-3" id="myScrollspy">
+    <ul class="nav nav-tabs nav-stacked affix-nav" id="affix-nav">
+        <li class="active"><a href="#introduction">Introduction</a></li>
+        <li><a href="#psms">Peptide/Spectrum matches</a>
+            <ul class="nav  nav-stacked  affix-nav">
+                <li><a href="#psm-spectrum">Annotated spectrum</a></li>
+                <li><a href="#psm-table">Fragment table</a></li>
+                <li><a href="#psm-strip">Strip icon</a></li>
+                <li><a href="#psm-pq">Wheel</a></li>
+                <li><a href="#psm-xic">XIC</a></li>
+            </ul>
+        </li>
+        <li><a href="#ssms">Spectrum/Spectrum matches</a>
+            <ul class="nav  nav-stacked  affix-nav">
+                <li><a href="#ssm-mirror">Mirror alignment</a></li>
+                <li><a href="#ssm-strip">Strip icon</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

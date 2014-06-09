@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Jasmine@msms-dry</title>
+    <link rel="stylesheet" type="text/css" href="../../bower_components/jasmine/lib/jasmine-core/jasmine.css">
+
+
+    <script type="text/javascript" src="../../bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
+    <script type="text/javascript" src="../../bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+    <script type="text/javascript" src="../../bower_components/jasmine/lib/console/console.js"></script>
+    <script type="text/javascript" src="../lib/jasmine2-junit.js"></script>
+    <script type="text/javascript" src="./boot-junit.js"></script>
+
+    <script src="../../bower_components/requirejs/require.js"></script>
+    <script src="../../src/js/require-config.js"></script>
+    <script src="jasmine-index.js"></script>
+
+    <style type="text/css">
+        div#dz {
+
+        }
+
+        div#dz div {
+            display: inline-block;
+            vertical-align: top;
+            border: black;
+            border-style: solid;
+            border-width: 1px;
+            margin: 10px
+        }
+    </style>
+</head>
+<body>
+<div id='dz'></div>
+<script type="text/javascript">
+    function addDZDiv(id, width, height) {
+        var divCont = $('<div><b>' + id + '</b><br/></div>');
+        var div = $('<div></div>');
+        divCont.append(div);
+
+        div.attr('id', id);
+        div.height(height || 200);
+        div.width(width || 200);
+        $('#dz').append(divCont)
+        return div;
+    }
+</script>
+
+<script type="text/javascript">
+//    var console_reporter = new jasmine.ConsoleReporter();
+    require(reqs, function ($, _, config) {
+        config.set('wet.url.rest', '/sinon');
+
+        //jasmine.getEnv().addReporter(new jasmine.ConsoleReporter());
+//        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+//        jasmine.getEnv().addReporter(new jasmine.JUnitXmlReporter());
+
+
+//                jasmineEnv.addReporter(new jasmine.HtmlReporter());
+
+//        jasmine.getEnv().addReporter(console_reporter);
+
+        window.executeTests()
+    });
+</script>
+
+</body>
+
+</html>

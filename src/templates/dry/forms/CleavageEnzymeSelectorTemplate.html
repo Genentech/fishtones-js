@@ -1,0 +1,6 @@
+<select name="cleavageEnzymeId">
+	<% _(models).each(function(ce) { %>
+	<option value="<%= ce.get('id') %>"><%= ce.toString() %></option>
+	<% }); %>
+
+</select>

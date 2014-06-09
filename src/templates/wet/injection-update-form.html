@@ -1,0 +1,38 @@
+<div class="injection">
+	<form id="form-injection-update"  method="post" enctype="multipart/form-data" class="form-horizontal">
+		<legend>
+			Update existing injection
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputInjName">name</label>
+			<div class="controls">
+				<input type="text" size="16" name="name" id="inputInjName" class='input-xlarge' placeholder="set a name & mzXml" value="{{name}}"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputInjMzxml">mzXml</label>
+			<div class="controls">
+				<span>{{runName}}</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputPrecursorTol">precursor tol.</label>
+			<div class="controls">
+				<div class="input-prepend">
+					<input type="number" name="precursorTol" id="inputPrecursorTol" class="input-mini" placeholder="numeric"  value="{{precursorTol}}"/>
+					<span class="add-on">ppm</span>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputFragmentTol">fragment tol.</label>
+			<div class="controls">
+				<div class="input-prepend">
+					<input type="number" name="fragmentTol" id="inputFragmentTol" class="input-mini" placeholder="numeric"  value="{{fragmentTol}}"/>
+					<span class="add-on">ppm</span>
+				</div>
+			</div>
+		</div>
+
+	</form>
+</div>

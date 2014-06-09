@@ -1,0 +1,654 @@
+/*
+ general
+ */
+
+rect.background {
+    fill: #ddd;
+}
+
+/*
+ *
+ * graph menu button
+ */
+
+g.scaling-area-menu-one-button rect.button {
+    fill: #eee;
+    stroke: blue;
+    fill-opacity: 0.60;
+    stroke-opacity: 0.60;
+    cursor: pointer;
+}
+g.scaling-area-menu-one-button rect.over-button {
+    fill: black;
+    fill-opacity: 0;
+}
+g.scaling-area-menu-one-button rect.over-button:hover {
+    fill-opacity: 0.08;
+}
+g.scaling-area-menu-one-button rect.over-button:active {
+    fill-opacity: 0.17;
+}
+
+g.scaling-area-menu-one-button text {
+    alignment-baseline: central;
+    text-anchor: middle;
+    fill: #333;
+    cursor: pointer;
+}
+
+/*match spectrum
+ */
+
+svg.d3-widget-match-spectrum {
+    z-index:9999;
+    position: absolute;
+    background:white;
+    border: black solid 1px;
+}
+svg.d3-widget-match-spectrum text.title {
+    dominant-baseline: hanging;
+}
+svg.d3-widget-match-spectrum rect.title {
+    fill: #e8e8e8;
+    fill-opacity: 0.35;
+}
+
+svg.d3-widget-match-spectrum rect.background {
+    fill: #f9f9f9;
+    fill-opacity: 1.0;
+    stroke-width: 1;
+    stroke: black
+}
+
+
+
+rect.button.click-zone {
+    fill-opacity: 0.;
+}
+path.button {
+    stroke-width: 2;
+    stroke: #222;
+    stroke-opacity: 1.0;
+    fill-opacity: 1.0;
+    opacity: 1;
+}
+
+
+g.button rect.button{
+    stroke-width:1px;
+    stroke:#333;
+    fill-opacity:0;
+    fill:green;
+}
+
+g.button:disabled{
+    cursor:default;
+    fill-opacity:0.50;
+}
+g.button{
+    cursor:pointer;
+}
+
+g.button:hover rect.button{
+    fill-opacity:0.20;
+}
+
+g.glyphicon.button:hover:disabled rect.button{
+    cursor:default;
+    fill-opacity:0;
+}
+
+g.button text{
+    /*alignment-baseline: central;*/
+    text-anchor:middle;
+    fill:blue;
+    font-size:90%;
+}
+
+
+
+
+svg.d3-widget-match-spectrum line.peak {
+    stroke-width: 1;
+    stroke: #333;
+}
+svg.d3-widget-match-spectrum line.peak.matched {
+    stroke-width: 2;
+}
+svg.d3-widget-match-spectrum line.peak.unmatched {
+    stroke:#555;
+}
+svg.d3-widget-match-spectrum line.peak.frag-series-y {
+    stroke: #f22;
+}
+
+svg.d3-widget-match-spectrum line.peak.frag-series-b{
+    stroke: #00f;
+}
+
+svg.d3-widget-match-spectrum rect.peak-baseline {
+    fill: #d4d9f9;
+    fill-opacity: 0.80;
+}
+
+svg.d3-widget-match-spectrum line.peak-truncated {
+    stroke-width: 1;
+    stroke: #333;
+    stroke-dasharray: 3, 3
+}
+
+svg.d3-widget-match-spectrum path.precursor {
+    stroke-width: 1;
+    stroke: #555;
+    fill: green;
+    fill-opacity: 0.50;
+}
+
+svg.d3-widget-match-spectrum path.label-pointer {
+    stroke-width: 1;
+    stroke-dasharray: 2, 2;
+    stroke: #f60;
+    fill: none;
+}
+
+svg.d3-widget-match-spectrum text.label {
+    font-family: monospace;
+    font-size: 10px;
+}
+
+/*
+ Match  map
+ */
+
+rect.match-box-text-bg {
+    fill:#fafafa;
+}
+text.unmatched-factor {
+    fill:red;
+    dominant-baseline: hanging;
+    text-anchor:end;
+    font-size: 0.8px;
+}
+
+rect.modified-site{
+    fill:#000;
+    fill-opacity:0.10;
+    stroke-width:1;
+    stroke:#333;
+}
+
+
+g.rect-container {
+    fill: #ddd;
+}
+
+line.peak{
+    stroke:#555;
+}
+
+line.peak.matching{
+    stroke-width:2px;
+}
+
+path.sector {
+    stroke:none;
+}
+
+rect.rk-0, path.sector-rk-0 {
+    fill: red;
+}
+line.peak.rk-0 {
+    stroke: red;
+    z-index: 100;
+}
+
+
+rect.rk-1, path.sector-rk-1 {
+    fill: #ff9100;
+}
+line.peak.rk-1 {
+    stroke: #ff9100;
+    z-index: 99;
+}
+
+rect.rk-2, path.sector-rk-2 {
+    fill: #ff0;
+}
+line.peak.rk-2 {
+    stroke: #ff0;
+    z-index: 98;
+}
+
+rect.rk-3, path.sector-rk-3 {
+    fill: #7df894;
+}
+line.peak.rk-3 {
+    stroke: #7df894;
+    z-index: 97;
+}
+
+rect.rk-x, path.sector-rk-x {
+    fill: #99f;
+}
+line.peak.rk-x {
+    stroke: #99f;
+    z-index: 96;
+}
+
+path.sector-rk-none {
+    fill: #ddd;
+}
+
+
+line.peak.peak-match {
+    stroke: green;
+    z-index: 100;
+}
+
+rect.spectra-pair-icon-bin.rk-0,line.peak.peak-match.rk-0 {
+    fill-opacity: 1;
+    stroke-opacity: 1;
+}
+rect.spectra-pair-icon-bin.rk-1,line.peak.peak-match.rk-1 {
+    fill-opacity: 0.8;
+    stroke-opacity: 0.8;
+}
+rect.spectra-pair-icon-bin.rk-2,line.peak.peak-match.rk-2{
+    fill-opacity: 0.6;
+    stroke-opacity: 0.6;
+}
+rect.spectra-pair-icon-bin.rk-3,line.peak.peak-match.rk-3{
+    fill-opacity: 0.4;
+    stroke-opacity: 0.4;
+}
+rect.spectra-pair-icon-bin.rk-x,line.peak.peak-match.rk-x{
+    fill-opacity: 0.2;
+    stroke-opacity: 0.2;
+}
+
+
+p
+/*
+ MatchGridValuesView
+ */
+svg.d3-widget-match-grid-values rect.background {
+    fill: white;
+}
+
+svg.d3-widget-match-grid-values text.aa {
+    font-size: 0.7px;
+    text-anchor: middle;
+}
+svg.d3-widget-match-grid-values text.aa-modif {
+    font-size: 0.3px;
+    text-anchor: middle;
+    fill: #333;
+}
+svg.d3-widget-match-grid-values text.series {
+    font-size: 0.5px;
+    text-anchor: end;
+}
+svg.d3-widget-match-grid-values text.poslabel {
+    font-size: 0.4px;
+    fill: #444;
+}
+svg.d3-widget-match-grid-values text.poslabel.nterm {
+    text-anchor: start;
+}
+svg.d3-widget-match-grid-values text.poslabel.cterm {
+    text-anchor: end;
+}
+
+svg.d3-widget-match-grid-values text.theofrag {
+    font-family: monospace;
+    font-size: 0.5px;
+    text-anchor: end;
+}
+
+svg.d3-widget-match-grid-values rect.matching {
+    fill-opacity: 0.3;
+}
+
+svg.d3-widget-theo-on-sequence path.fragment {
+    stroke-width: 1;
+    stroke-dasharray: 2, 2;
+    stroke: #f60;
+    fill: none;
+}
+svg.d3-widget-theo-on-sequence text.aa {
+    font-size: 14px;
+    text-anchor: middle;
+}
+svg.d3-widget-theo-on-sequence text.aa-modif {
+    font-size: 8px;
+    text-anchor: middle;
+    fill: #333;
+}
+svg.d3-widget-theo-on-sequence text.frag-moz {
+    font-size: 10px;
+    font-family: monospace;
+}
+
+line.tick {
+    fill: none;
+    stroke: #222;
+    stroke-width: 1px;
+}
+path.domain {
+    fill: none;
+    stroke: #222;
+    stroke-width: 1px;
+}
+g.axis text {
+}
+
+div#explore-control {
+    height: 7em;
+}
+
+input#input-peptide {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 2em;
+}
+
+div.peptide-list-bullet {
+    float: left;
+    margin-top: 5px;
+    margin-right: 1em;
+    border-radius: 0.50;
+    width: 15px;
+    height: 10px;
+    border-right: 5px solid black;
+}
+div.peptide-list-bullet.target_0 {
+    border-color: #00f;
+}
+div.peptide-list-bullet.target_1 {
+    border-color: #f00;
+}
+div.peptide-list-bullet.target_2 {
+    border-color: #0f0;
+}
+
+div#explore-chromatos {
+    margin-left: 0px;
+}
+
+text.injection-label {
+    font-family: monospace;
+}
+
+path.chromato {
+    stroke-width: 2;
+    stroke: #333;
+}
+
+path.chromato {
+    fill: none;
+    stroke-width: 2;
+    stroke: #333;
+}
+
+path.chromato.charge_1 {
+    stroke-dasharray: 20, 3, 3, 3, 44, 0
+}
+
+path.chromato.charge_2 {
+    stroke-dasharray: 20, 3, 3, 3, 3, 3, 38, 0
+}
+
+path.chromato.charge_3 {
+    stroke-dasharray: 20, 3, 3, 3, 3, 3, 3, 3, 32, 0
+}
+
+path.chromato.charge_4 {
+    stroke-dasharray: 20, 3, 3, 3, 3, 3, 3, 3, 3, 3, 26, 0
+}
+
+path.chromato.charge_5 {
+    stroke-dasharray: 20, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 20, 0
+}
+
+g.chromato.plot path {
+    stroke-opacity: 0.80;
+}
+
+path.chromato.target_0 {
+    stroke: #00f;
+}
+
+path.chromato.target_1 {
+    stroke: #f00;
+}
+
+path.chromato.target_2 {
+    stroke: #0f0;
+}
+
+g.legend-container text{
+    font-size:70%;
+    alignment-baseline: central;
+}
+g.legend-container rect.background{
+    fill:white;
+    fill-opacity:0.3;
+    stroke:#333;
+    stroke-opacity:0.7;
+}
+
+svg.time-scale rect.zoom-area {
+    fill-opacity: .0;
+    cursor: hand;
+}
+g.x-selector rect.background {
+    fill: white;
+    fill-opacity: 1;
+    cursor: hand;
+}
+g.x-selector rect.hider {
+    fill: #000;
+    fill-opacity: 0.05;
+}
+
+g.xic.yaxis g.tick line, g.xaxis g.tick line, g.axis g.tick line{
+    stroke:#333;
+}
+g.xic.yaxis g:nth-of-type(1) {
+    display: none
+}
+g.xic.yaxis g:nth-last-of-type(1) {
+    display: none
+}
+g.yaxis text, g.xaxis text {
+    fill: #333;
+}
+
+div.xic-legend {
+    width: 4em;
+}
+div.xic-legend.legend-line {
+    margin-top: .5em;
+    margin-left: 1em;
+}
+
+text.xic.title {
+    text-anchor: end;
+    font-weight: bold;
+    fill-opacity: 0.50;
+}
+/*
+ * ok, that should not be here
+ */
+
+svg.bchart g.axis path, svg.bchart line.tick {
+    fill: none;
+    stroke: #222;
+    stroke-width: 1px;
+}
+
+ul.typeahead.dropdown-menu.msmsrun-selector {
+    max-height: 41em;
+    overflow-y: scroll;
+    width: 550px;
+}
+
+.button-drag {
+    cursor: move;
+}
+.button-pointer {
+    cursor: pointer
+}
+
+/*protein graph */
+g.pg-vertex.movable{
+    cursor: move;
+}
+
+g.pg-vertex.aa circle {
+    fill: #fff;
+    stroke: #333;
+    stroke-width:0.05;
+}
+
+g.pg-vertex.variant circle {
+    fill: #fff;
+    stroke: #333;
+    stroke-width:0.05;
+    stroke-dasharray: .1, .2;
+}
+
+g.pg-vertex.aa text,g.pg-vertex.variant text {
+    font-size: 1.3px;
+    alignment-baseline: mathematical;
+    text-anchor: middle;
+}
+g.pg-vertex.resmod circle {
+    fill: #eee
+}
+
+g.pg-vertex.resmod text {
+    font-size: 0.8px;
+    alignment-baseline: mathematical;
+    text-anchor: middle;
+}
+
+g.pg-vertex.ctermini path, g.pg-vertex.ntermini path {
+    fill : green;
+}
+g.pg-vertex.junction circle {
+    fill: red;
+}
+
+line.pg-edge {
+    stroke:black;
+}
+line.pg-edge.miscleav {
+    stroke-dasharray: 4, 4;
+}
+
+/**
+ *     spaectra laifgnments
+ */
+
+svg.spectra-pair-alignment rect.background{
+   fill:white;
+}
+
+svg.spectra-pair-alignment line.axis{
+    stroke:#444;
+}
+svg.spectra-pair-alignment g.axis text{
+    font-size:60%;
+}
+
+svg.spectra-pair-alignment line.peak.matched{
+    stroke-width:1px;
+    stroke-opacity:0.30;
+}
+svg.spectra-pair-alignment line.peak.unmatched{
+    stroke-width:2px;
+}
+
+svg.spectra-pair-alignment line.peak-match{
+    stroke-width:3px;
+}
+
+svg.spectra-pair-alignment g.titles text.scan, g.spectrum g.titles text.scan{
+    text-anchor:end;
+    font-weight:bold;
+    fill-opacity:0.60
+}
+svg.spectra-pair-alignment g.titles text.top{
+    alignment-baseline: hanging;
+}
+
+svg.spectra-pair-icon rect.background{
+    fill:white;
+}
+rect.spectra-pair-icon-bin.matched{
+    fill:green;
+}
+rect.spectra-pair-icon-bin.unmatched{
+    fill:red;
+}
+
+/**
+ *     annotations
+ */
+
+line.annot-link{
+    stroke:rgba(255,96, 0, 0.4);
+    stroke-dasharray: 2, 4;
+}
+
+/**
+ *     glyphicons */
+g.glyphicon rect.button{
+    stroke-width:1px;
+    stroke:#333;
+    fill-opacity:0;
+    fill:green;
+}
+
+g.glyphicon:disabled{
+    fill-opacity:0.50;
+}
+g.glyphicon.button:hover{
+    cursor:pointer;
+    
+}
+g.glyphicon.button:hover rect.button{
+    cursor:pointer;
+    fill-opacity:0.20;
+}
+g.glyphicon.button:hover:disabled rect.button{
+    cursor:default;
+    fill-opacity:0;
+}
+
+
+
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: 60px;                  
+  height: 28px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
+}
+
+button.glyphicons {
+    width:24px;
+    height:24px;
+}
+
+button.glyphicons i:before{
+    line-height:24px!important;
+    font: 12px/1em 'Glyphicons';
+    left:12px
+}
