@@ -5,6 +5,10 @@
     "Alexandre Masselot <masselot.alexandre@gene.com>"
   ],
   "description": "LC/MSMS libraries, dry, wet & match",
+    "main": [
+        "dist/fishtones-js-bundle-min.js",
+        "dist/fishtones-js.css"
+    ],
   "moduleType": [
     "amd"
   ],
