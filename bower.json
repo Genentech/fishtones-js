@@ -1,6 +1,6 @@
 {
   "name": "fishtones-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [
     "Alexandre Masselot <masselot.alexandre@gene.com>"
   ],
@@ -21,6 +21,9 @@
     "tests"
   ],
   "dependencies": {
+  },
+  "devDependencies": {
+    "jasmine": "~2.0.0",
     "jquery": "~1.9",
     "underscore": "~1.6.0",
     "d3": "~3.4.4",
@@ -29,8 +32,5 @@
     "backbone": "~1.1.2",
     "requirejs": "~2.1.11",
     "typeahead.js": "~0.10.2"
-  },
-  "devDependencies": {
-    "jasmine": "~2.0.0"
   }
 }

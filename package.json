@@ -1,6 +1,6 @@
 {
   "name": "fishtones",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "LC/MSMS libraries, dry, wet & match",
   "maintainers": [
     "Alexandre Masselot <masseloa@gene.com>"
